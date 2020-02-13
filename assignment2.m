@@ -128,12 +128,16 @@ surf(V)
 
 
 %Analytical Soln
-Vanal = zeros(nx,ny);
-a = linspace(0,ny);
-b = linspace(-nx/2,nx/2); 
+
+Vanal = zeros(ny,nx);
+y = linspace(0,ny,ny);
+x = linspace(-nx/2,nx/2, nx); 
+a = ny;
+b = nx;
+[X,Y] = meshgrid(x,y);
 
 for n = 1:2:100
-    Vanal = Vanal +((4*Vo)/pi)* sum((1/n)*(cosh((n*pi*nx)./a)./(cosh((n*pi*b)./a)).*sin((n*pi*ny./a))));
+    Vanal = Vanal +((4*Vo)/pi)* sum((1/n)*(cosh((n*pi*X)./a)./(cosh((n*pi*b)./a))).*sin((n*pi*Y./a)));
 end
 
 figure(3)
