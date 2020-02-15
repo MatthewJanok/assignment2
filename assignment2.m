@@ -6,20 +6,18 @@ ny = 30;
 Vo = 1;
 delx = 1e-3;
 dely = 1e-3;
-Acond = 1;
-Bcond = 10E-2;
 
 G = sparse(nx*ny,nx*ny);
 Vv = zeros(nx*ny,1);
 V = zeros(nx,ny);
 B = zeros((nx*ny),1);
         
-        
+%Part 1 a)        
         
 %Initialize Left Boundary Conditions
 for i = 1:nx*ny
     B(i,1) = Vo;
-    B(i,ny) = Vo;
+    B(i,ny) = 0;
 end
         
 %Set diagonal
@@ -35,6 +33,7 @@ for j = 1:ny
         elseif j == ny
             G(n,:) = 0;
             G(n,n) = 1;
+            %Part a) B(n,1) = 0
             B(n,1) = 1;
             
         elseif i == 1
@@ -88,7 +87,13 @@ end
 
 figure(2)
 surf(V)
+xlabel('ny Value')
+ylabel('nx Value')
 
+
+
+
+%Part 1 b)
 % %Analytical Soln
 nx = 20;
 ny = 30;
@@ -108,6 +113,8 @@ end
 
 figure(3)
 surf(Vanal)
+xlabel('ny Value')
+ylabel('nx Value')
 
 
 
@@ -129,8 +136,15 @@ surf(Vanal)
 
 
 %Part 2
+nx = 20;
+ny = 30;
 
 cMap = zeros(nx, ny);
+
+for k = 1:10
+Acond = 1;
+Bcond = linspace(10E-10,1,10);
+Bcond = Bcond(k);
 
 for j = 1:ny
     for i = 1:nx
@@ -267,44 +281,49 @@ end
 
 Ex = -Ex;
 Ey = -Ey;
-figure(6)
-surf(Ex)
-xlabel('ny Value')
-ylabel('nx Value')
+% figure(6)
+% surf(Ex)
+% xlabel('ny Value')
+% ylabel('nx Value')
+% 
+% figure(7)
+% surf(Ey)
+% xlabel('ny Value')
+% ylabel('nx Value')
+% 
+% figure(8)
+% surf(Ex,Ey)
+% xlabel('ny Value')
+% ylabel('nx Value')
 
-figure(7)
-surf(Ey)
-xlabel('ny Value')
-ylabel('nx Value')
+Jx = cMap.*Ex;
+Jy = cMap.*Ey;
 
-figure(8)
-surf(Ex,Ey)
-xlabel('ny Value')
-ylabel('nx Value')
+% figure(9)
+% surf(Jx)
+% xlabel('ny Value')
+% ylabel('nx Value')
+% 
+% figure(10)
+% surf(Jy)
+% xlabel('ny Value')
+% ylabel('nx Value')
+% 
+% figure(11)
+% surf(Jx,Jy)
+% xlabel('ny Value')
+% ylabel('nx Value')
 
-eflowx = cMap.*Ex;
-eflowy = cMap.*Ey;
-
-figure(9)
-surf(eflowx)
-xlabel('ny Value')
-ylabel('nx Value')
-
-figure(10)
-surf(eflowy)
-xlabel('ny Value')
-ylabel('nx Value')
-
-figure(11)
-surf(eflowx,eflowy)
-xlabel('ny Value')
-ylabel('nx Value')
-
-C0 = sum(eflowx(1,:));
-Cnx = sum(eflowx(nx,:));
+C0 = sum(Jx(1,:));
+Cnx = sum(Jx(nx,:));
 Curr = (C0+Cnx)*0.5;
 
-
+figure(15)
+plot(Bcond, Curr,'r.')
+xlabel('Bcond (sigma)')
+ylabel('Current (A)')
+hold on
+end
 
 
 
