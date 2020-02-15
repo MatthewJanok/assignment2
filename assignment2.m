@@ -13,19 +13,6 @@ G = sparse(nx*ny,nx*ny);
 Vv = zeros(nx*ny,1);
 V = zeros(nx,ny);
 B = zeros((nx*ny),1);
-
-cMap = ones(nx, ny);
-% cMap = zeros(nx, ny);
-% 
-% for j = 1:ny
-%     for i = 1:nx
-%         cMap(i,j) = Acond;
-%         if ((j<((2/3)*ny))&&((j>((1/3)*ny))&&(i<((1/3)*nx))))|| ((j<((2/3)*ny))&&((j>((1/3)*ny))&&(i>((2/3)*nx))))
-%             cMap(i,j) = Bcond;
-%         end
-%     end
-% end
-        
         
         
         
@@ -139,7 +126,24 @@ surf(Vanal)
 
 
 
+
+
 %Part 2
+
+cMap = zeros(nx, ny);
+
+for j = 1:ny
+    for i = 1:nx
+        cMap(i,j) = Acond;
+        if ((j<((2/3)*ny))&&((j>((1/3)*ny))&&(i<((1/3)*nx))))|| ((j<((2/3)*ny))&&((j>((1/3)*ny))&&(i>((2/3)*nx))))
+            cMap(i,j) = Bcond;
+        end
+    end
+end
+figure(4)
+surf(cMap)    
+xlabel('ny Value')
+ylabel('nx Value')
 
 %Initialize Left Boundary Conditions
 for i = 1:nx*ny
@@ -225,8 +229,6 @@ for j = 1:ny
     end
 end
 
-figure(4)
-spy(G)
 Vv = G\B;
 
 for j = 1:ny
@@ -238,11 +240,12 @@ end
 
 figure(5)
 surf(V)
+xlabel('ny Value')
+ylabel('nx Value')
 
 
 
-
-
+%Gradient of V
 for j = 1:ny
     for i = 1:nx
         if j == 1
@@ -263,10 +266,39 @@ for j = 1:ny
 end
 
 Ex = -Ex;
-Ey = -Ex;
+Ey = -Ey;
+figure(6)
+surf(Ex)
+xlabel('ny Value')
+ylabel('nx Value')
+
+figure(7)
+surf(Ey)
+xlabel('ny Value')
+ylabel('nx Value')
+
+figure(8)
+surf(Ex,Ey)
+xlabel('ny Value')
+ylabel('nx Value')
 
 eflowx = cMap.*Ex;
 eflowy = cMap.*Ey;
+
+figure(9)
+surf(eflowx)
+xlabel('ny Value')
+ylabel('nx Value')
+
+figure(10)
+surf(eflowy)
+xlabel('ny Value')
+ylabel('nx Value')
+
+figure(11)
+surf(eflowx,eflowy)
+xlabel('ny Value')
+ylabel('nx Value')
 
 C0 = sum(eflowx(1,:));
 Cnx = sum(eflowx(nx,:));
